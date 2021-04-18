@@ -1,0 +1,101 @@
+<html>
+<head>
+    <link href="style.css" rel="stylesheet" type="text/css">
+</head>
+<h1>triangle example</h1>
+
+    <canvas id="canvas" width="500" height="500"></canvas>
+    <div>
+        <p>Set vertex coordinates(between 0 and 50)</p>
+        <div>
+            <label for="firstX">1st vertex X:</label>
+            <input type="number" id="firstX" name="firstX" min="0" max="600"> 
+            <label for="firstY">Y:</label>
+            <input type="number" id="firstY" name="firstY" min="0" max="600"><br><br>
+        </div>
+        <div>
+            <label for="secondX">2nd vertex X:</label>
+            <input type="number" id="secondX" name="secondX" min="0" max="600"> 
+            <label for="secondY">Y:</label>
+            <input type="number" id="secondY" name="secondY" min="0" max="600"><br><br>
+        </div>
+        <div>
+            <label for="thirdX">3rd vertex X:</label>
+            <input type="number" id="thirdX" name="thirdX" min="0" max="600"> 
+            <label for="thirdY">Y:</label>
+            <input type="number" id="thirdY" name="thirdY" min="0" max="600"><br><br>
+        </div>
+        <button id="draw" onclick="draw()"> show triangle </button>
+        <label id="type" /> 
+    </div>
+
+
+</html>
+
+<script>
+
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    function draw() {
+        ctx.canvas.width = ctx.canvas.width //reset the canvas
+
+        let triangleDetail = getTriangle() //get triangle coordinates and edges
+        let coordinates
+        let edges 
+
+        if(triangleDetail.length > 0) {
+            coordinates = triangleDetail[0]
+            edges = triangleDetail[1]
+
+            //draw the triangle
+            ctx.beginPath()
+            ctx.moveTo(coordinates[0][0], coordinates[0][1])
+            ctx.lineTo(coordinates[1][0], coordinates[1][1])
+            ctx.lineTo(coordinates[2][0], coordinates[2][1]) 
+            ctx.closePath()
+            ctx.stroke()
+
+        } else {
+            document.getElementById("type").innerHTML = "It is not a legit triangle"
+            return
+        }
+
+    }
+
+    function getTriangle() {
+
+        let coordinates = []
+        let edges = []
+        // read vertex coordinates
+        coordinates.push([document.getElementById("firstX").value*10, document.getElementById("firstY").value*10])
+        coordinates.push([document.getElementById("secondX").value*10, document.getElementById("secondY").value*10])
+        coordinates.push([document.getElementById("thirdX").value*10, document.getElementById("thirdY").value*10])
+        //calculate edges length
+        edges.push(Math.sqrt(Math.pow(coordinates[0][0]-coordinates[1][0],2) + Math.pow(coordinates[0][1]-coordinates[1][1],2)))
+        edges.push(Math.sqrt(Math.pow(coordinates[1][0]-coordinates[2][0],2) + Math.pow(coordinates[1][1]-coordinates[2][1],2)))
+        edges.push(Math.sqrt(Math.pow(coordinates[0][0]-coordinates[2][0],2) + Math.pow(coordinates[0][1]-coordinates[2][1],2)))
+        edges.sort() //sorted by length
+
+        let isVertexOnSameX = coordinates[0][0] == coordinates[1][0] && coordinates[1][0] == coordinates[2][0]
+        let isVertexOnSameY = coordinates[0][1] == coordinates[1][1] && coordinates[1][1] == coordinates[2][1]
+
+        if(edges[0] > 0 && edges[1] > 0 && edges[2] > 0 && !isVertexOnSameX && !isVertexOnSameY) {
+            document.getElementById("type").innerHTML = edges [0]
+            type = [getTriangleType(edges)]
+            return [coordinates, edges, type]
+        } else {
+            return []
+        }
+    }
+
+    function getTriangleType(edges) {
+        let type = "scalene" 
+        if (edges[0] == edges[1] == edges[2]) {
+            type = "equilateral"
+        } else if(edges[0] == edges[1] || edges[1] == edges[2]) {
+            type = "isosceles"
+        }
+        document.getElementById("type").innerHTML = "It is " + type 
+    }
+
+</script>
