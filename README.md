@@ -4,6 +4,6 @@ The demo is hosted on https://triangledemo.azurewebsites.net/
 
 For running locally
 
-npm -install
+`npm install`
 
-node app.js
+`node app.js`
