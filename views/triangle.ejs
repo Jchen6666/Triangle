@@ -2,31 +2,34 @@
 <head>
     <link href="style.css" rel="stylesheet" type="text/css">
 </head>
-<h1>triangle example</h1>
+<h1>triangle demo</h1>
 
     <canvas id="canvas" width="500" height="500"></canvas>
     <div>
         <p>Set vertex coordinates(between 0 and 50)</p>
         <div>
             <label for="firstX">1st vertex X:</label>
-            <input type="number" id="firstX" name="firstX" min="0" max="600"> 
+            <input type="number" id="firstX" name="firstX" min="0" max="50"> 
             <label for="firstY">Y:</label>
-            <input type="number" id="firstY" name="firstY" min="0" max="600"><br><br>
+            <input type="number" id="firstY" name="firstY" min="0" max="50"><br><br>
         </div>
         <div>
             <label for="secondX">2nd vertex X:</label>
-            <input type="number" id="secondX" name="secondX" min="0" max="600"> 
+            <input type="number" id="secondX" name="secondX" min="0" max="50"> 
             <label for="secondY">Y:</label>
-            <input type="number" id="secondY" name="secondY" min="0" max="600"><br><br>
+            <input type="number" id="secondY" name="secondY" min="0" max="50"><br><br>
         </div>
         <div>
             <label for="thirdX">3rd vertex X:</label>
-            <input type="number" id="thirdX" name="thirdX" min="0" max="600"> 
+            <input type="number" id="thirdX" name="thirdX" min="0" max="50"> 
             <label for="thirdY">Y:</label>
-            <input type="number" id="thirdY" name="thirdY" min="0" max="600"><br><br>
+            <input type="number" id="thirdY" name="thirdY" min="0" max="50"><br><br>
         </div>
         <button id="draw" onclick="draw()"> show triangle </button>
-        <label id="type" /> 
+        <div>
+            <label id="type" /> 
+        </div>
+
     </div>
 
 
@@ -34,14 +37,15 @@
 
 <script>
 
-    const canvas = document.getElementById('canvas');
-    const ctx = canvas.getContext('2d');
+    const canvas = document.getElementById('canvas')
+    const ctx = canvas.getContext('2d')
+
+    //function to display triangle
     function draw() {
         ctx.canvas.width = ctx.canvas.width //reset the canvas
 
         let triangleDetail = getTriangle() //get triangle coordinates and edges
-        let coordinates
-        let edges 
+        let coordinates, edges
 
         if(triangleDetail.length > 0) {
             coordinates = triangleDetail[0]
@@ -62,6 +66,7 @@
 
     }
 
+    //function to get triangle's vertex coordinates, edges and type
     function getTriangle() {
 
         let coordinates = []
@@ -76,7 +81,8 @@
         edges.push(Math.sqrt(Math.pow(coordinates[0][0]-coordinates[2][0],2) + Math.pow(coordinates[0][1]-coordinates[2][1],2)))
         edges.sort() //sorted by length
 
-        let isVertexOnSameX = coordinates[0][0] == coordinates[1][0] && coordinates[1][0] == coordinates[2][0]
+        //check whether three vertex coordinates are on the same X or Y axis
+        let isVertexOnSameX = coordinates[0][0] == coordinates[1][0] && coordinates[1][0] == coordinates[2][0] 
         let isVertexOnSameY = coordinates[0][1] == coordinates[1][1] && coordinates[1][1] == coordinates[2][1]
 
         if(edges[0] > 0 && edges[1] > 0 && edges[2] > 0 && !isVertexOnSameX && !isVertexOnSameY) {
@@ -84,18 +90,23 @@
             type = [getTriangleType(edges)]
             return [coordinates, edges, type]
         } else {
-            return []
+            return [] // return empty array if it is not a legit triangle
         }
     }
 
+    //function to get triangle type scalene, equilateral or isosceles
     function getTriangleType(edges) {
         let type = "scalene" 
+        // if all three edges are equal
         if (edges[0] == edges[1] == edges[2]) {
-            type = "equilateral"
+            type = "equilateral" 
+        // if any two edges are equal, since edges array is sorted so only two pairs need to be checked
         } else if(edges[0] == edges[1] || edges[1] == edges[2]) {
             type = "isosceles"
         }
-        document.getElementById("type").innerHTML = "It is " + type 
+        //show the triangle type and edges length round to two decimals
+        document.getElementById("type").innerHTML = "It is " + type + ", and edges length are: " + (Math.round(edges[0] * 100) / 100) + 
+                                                    ", " + (Math.round(edges[1] * 100) / 100) + ", " + (Math.round(edges[2] * 100) / 100)
     }
 
 </script>
