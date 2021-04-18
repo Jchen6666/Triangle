@@ -6,4 +6,6 @@ app.get("/", function(req, res) {
       res.render("triangle.ejs")
   });
 
-app.listen(port, () => console.log(`Application listening on port ${port}!`))
+process.env.PORT = process.env.PORT || 3000;
+
+app.listen(process.env.PORT, () => console.log(`Application listening on port ${process.env.PORT}!`))
